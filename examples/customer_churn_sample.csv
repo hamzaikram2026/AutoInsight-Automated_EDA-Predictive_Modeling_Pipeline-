@@ -1,0 +1,17 @@
+customer_id,age,plan,monthly_revenue,support_tickets,tenure_months,churn
+1001,22,basic,19,4,3,1
+1002,31,pro,59,1,14,0
+1003,45,enterprise,199,0,28,0
+1004,27,basic,19,3,5,1
+1005,52,pro,79,1,31,0
+1006,38,pro,69,2,12,0
+1007,24,basic,29,5,2,1
+1008,41,enterprise,249,0,44,0
+1009,36,pro,59,2,16,0
+1010,29,basic,19,4,4,1
+1011,58,enterprise,299,1,52,0
+1012,34,pro,89,3,7,1
+1013,47,enterprise,219,0,36,0
+1014,26,basic,29,4,6,1
+1015,43,pro,79,1,18,0
+1016,39,pro,69,2,15,0
