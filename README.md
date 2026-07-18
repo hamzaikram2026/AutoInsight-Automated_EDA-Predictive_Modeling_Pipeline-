@@ -145,10 +145,10 @@ cd AutoInsight-Automated_EDA-Predictive_Modeling_Pipeline-
 pip install -r requirements.txt
 streamlit run app.py
 ```
-## More of my work
+## Other Projects
 
 - **[Pharmaceutical Inventory Demand Forecasting](https://github.com/hamzaikram2026/Pharmaceutical-Inventory-Demand-Forecasting-using-Machine-Learning)** Time-series demand forecasting for pharma inventory using `RandomForestRegressor` (R² = 0.95)
-- **[Automated Text Structuring Pipeline](https://github.com/hamzaikram2026/Automated_Text_Structuring_Pipeline)** — Pipeline that Transforms Unstructure raw ingredient text into clean Structured Data using Natural Language Processing.
+- **[Automated Text Structuring Pipeline](https://github.com/hamzaikram2026/Automated_Text_Structuring_Pipeline)** — Pipeline that Transforms Unstructure raw ingredient text into clean Structured Data using `Natural Language Processing`.
 
 ---
 *Hamza Ikram — [GitHub](https://github.com/hamzaikram2026)*
