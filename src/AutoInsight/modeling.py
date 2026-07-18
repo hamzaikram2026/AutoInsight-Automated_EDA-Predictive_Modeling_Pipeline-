@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import math
-
+import time
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.linear_model import LogisticRegression, Ridge
@@ -23,9 +23,10 @@ def _classification_models() -> dict[str, object]:
     return {
         "Logistic Regression": LogisticRegression(max_iter=1000),
         "Random Forest Classifier": RandomForestClassifier(
-            n_estimators=150,
+            n_estimators=100,
             random_state=42,
             class_weight="balanced",
+            n_jobs=-1,
         ),
     }
 
@@ -34,8 +35,9 @@ def _regression_models() -> dict[str, object]:
     return {
         "Ridge Regression": Ridge(alpha=1.0),
         "Random Forest Regressor": RandomForestRegressor(
-            n_estimators=150,
+            n_estimators=100,
             random_state=42,
+            n_jobs=-1,
         ),
     }
 
@@ -61,15 +63,24 @@ def train_baselines(df: pd.DataFrame, target: str, task_type: TaskType) -> list[
     models = _classification_models() if task_type == "classification" else _regression_models()
     results: list[ModelResult] = []
 
+
+
     for name, estimator in models.items():
+        start = time.perf_counter()
+
         pipeline = Pipeline(
             steps=[
                 ("preprocessor", build_preprocessor(x_train)),
                 ("model", estimator),
             ]
         )
+
         pipeline.fit(x_train, y_train)
+        print(name, "fit:", time.perf_counter() - start)
+
+        start = time.perf_counter()
         predictions = pipeline.predict(x_test)
+        print(name, "predict:", time.perf_counter() - start)
 
         if task_type == "classification":
             accuracy = float(accuracy_score(y_test, predictions))

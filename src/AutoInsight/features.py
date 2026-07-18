@@ -13,7 +13,15 @@ def split_features_target(df: pd.DataFrame, target: str) -> tuple[pd.DataFrame, 
 
 def build_preprocessor(features: pd.DataFrame) -> ColumnTransformer:
     numeric_features = features.select_dtypes(include=["number", "bool"]).columns.tolist()
+
     categorical_features = features.select_dtypes(exclude=["number", "bool"]).columns.tolist()
+
+    # Remove identifier columns
+    categorical_features = [
+        c for c in categorical_features
+        if c.lower() not in {"customerid", "id", "uuid"}
+        and not c.lower().endswith("_id")
+    ]
 
     numeric_pipeline = Pipeline(
         steps=[
@@ -21,11 +29,20 @@ def build_preprocessor(features: pd.DataFrame) -> ColumnTransformer:
             ("scaler", StandardScaler()),
         ]
     )
+
     categorical_pipeline = Pipeline(
         steps=[
             ("imputer", SimpleImputer(strategy="most_frequent")),
             ("encoder", OneHotEncoder(handle_unknown="ignore", sparse_output=False)),
         ]
+    )
+
+    return ColumnTransformer(
+        transformers=[
+            ("numeric", numeric_pipeline, numeric_features),
+            ("categorical", categorical_pipeline, categorical_features),
+        ],
+        remainder="drop",
     )
 
     return ColumnTransformer(

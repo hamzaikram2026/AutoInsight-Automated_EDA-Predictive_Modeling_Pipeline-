@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from pathlib import Path
 import pandas as pd
 import streamlit as st
 
@@ -12,29 +12,160 @@ from src.AutoInsight.validation import DatasetValidationError
 
 
 st.set_page_config(
-    page_title="AutoInsight",
-    page_icon="AI",
+    page_title="AutoInsight | AI-Powered Data Analysis",
+    page_icon="",
     layout="wide",
 )
 
-st.title("AutoInsight")
-st.caption("Upload a CSV, ask a business question, and get profiling, modeling, charts, and a report.")
+st.markdown("""
+<style>
+
+/* ---------- Header ---------- */
+
+.main-title {
+    font-size: 3.8rem;
+    font-weight: 800;
+    margin-bottom: 0.2rem;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #BDBDBD;
+    margin-bottom: 0.35rem;
+}
+
+.description {
+    font-size: 1.2rem;
+    color: #A8A8A8;
+    margin-bottom: 2rem;
+}
+
+/* ---------- Labels ---------- */
+
+label {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+}
+
+/* ---------- Markdown Headings ---------- */
+
+h1 {font-size: 3rem !important;}
+h2 {font-size: 2.2rem !important;}
+h3 {font-size: 1.7rem !important;}
+
+/* ---------- Text Area ---------- */
+
+textarea {
+    font-size: 1.05rem !important;
+}
+
+/* ---------- Select Box ---------- */
+
+.stSelectbox div[data-baseweb="select"] {
+    font-size: 1.05rem !important;
+}
+
+/* ---------- Buttons ---------- */
+
+.stButton button,
+.stDownloadButton button {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+}
+
+/* ---------- Tabs ---------- */
+
+button[data-baseweb="tab"] {
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+}
+
+/* ---------- Metrics ---------- */
+
+[data-testid="stMetricValue"] {
+    font-size: 2rem !important;
+}
+
+[data-testid="stMetricLabel"] {
+    font-size: 1rem !important;
+}
+/* Widget labels (Dataset, Business Question, Target column, etc.) */
+.stFileUploader label,
+.stTextArea label,
+.stSelectbox label {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+}
+
+</style>
+
+<div class="main-title">AutoInsight : AI-Powered Data Analysis Platform</div>
+
+<div class="subtitle">
+Developed by Hamza Ikram
+</div>
+
+<div class="description">
+Upload any CSV and automatically generate data profiling, visualizations,
+machine learning models, and an AI-powered report.
+</div>
+
+""", unsafe_allow_html=True)
+
 
 uploaded_file = st.file_uploader("Dataset", type=["csv"])
+
+sample_path = Path("example dataset") / "Kaggle-Telco-Customer-Churn.csv"
+
+with open(sample_path, "rb") as f:
+    st.download_button(
+        label="Download Sample Dataset",
+        data=f,
+        file_name="Kaggle-Telco-Customer-Churn.csv",
+        mime="text/csv",
+    )
+
 business_question = st.text_area(
-    "Business question",
-    placeholder="Example: Which customers are most likely to churn, and what patterns explain it?",
-    height=90,
+    "Business Question",
+     placeholder="Describe the business problem you want AutoInsight to solve...",
+    height=100,
 )
+
+st.markdown("##### Need inspiration? Choose an example business question")
+
+example_questions = [
+    "Select an example business question...",
+    "Which factors have the strongest impact on the target variable?",
+    "What patterns or trends can be identified in this dataset?",
+    "Which records are most likely to have the predicted outcome?",
+    "Are there any unusual values or anomalies in the data?",
+    "What business insights and recommendations can be derived from this dataset?"
+]
+
+selected_question = st.selectbox(
+    "Example Business Questions",
+    example_questions,
+)
+if selected_question != example_questions[0]:
+    business_question = selected_question
+
 
 if uploaded_file is None:
     st.info("Upload a CSV file to begin.")
     st.stop()
 
 df = pd.read_csv(uploaded_file)
+
 target_options = ["Auto infer"] + [str(column) for column in df.columns]
 target_choice = st.selectbox("Target column", target_options)
-target_override = None if target_choice == "Auto infer" else target_choice
+target_override = None if target_choice == "Auto infer" else target_choice.strip().lower()
+
+run_analysis_btn = st.button("Run Analysis")
+
+if not run_analysis_btn:
+    st.info("Configure your options and click **Run Analysis**.")
+    st.stop()
 
 with st.spinner("Running autonomous analysis..."):
     try:
