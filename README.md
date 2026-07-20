@@ -2,7 +2,11 @@
 
 An end-to-end Streamlit app that turns any CSV into a full analysis — automated data profiling, cleaning, visualizations, baseline ML models, and a downloadable AI-style report — all driven by a plain-English business question.
 
-> Live Demo:** [autoinsight-26.streamlit.app](https://autoinsight-26.streamlit.app/)
+## Live Demo
+
+**The project is deployed as an interactive Streamlit web app:**
+
+🔗 **[autoinsight-26.streamlit.app](https://autoinsight-26.streamlit.app/)**
 
 ## Project Overview
 
